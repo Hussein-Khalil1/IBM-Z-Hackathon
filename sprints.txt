@@ -1,16 +1,15 @@
 ================================================================================
   FUELEQUITY — SPRINT PLAN & USER STORIES
   Financial Inclusion · Climate Impact · Community-Powered Trip Economics
-  Total: 5 Sprints · 48 Features · 148 Story Points
+  Total: 5 Sprints · 48 Features
 ================================================================================
 
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SPRINT 1 — FOUNDATION & AUTH                                        34 pts
+  SPRINT 1 — FOUNDATION & AUTH                                     
   Goal: Project scaffold · User auth · Navigation shell · DB schema
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  S1-01 | 5 pts | Frontend + Backend
+  S1-01 | Frontend + Backend
   Expo + React Native project scaffold
   -----------------------------------------------------------------------
   AS A developer
@@ -29,7 +28,7 @@
     - Runs on iOS simulator and Android emulator without errors
 
 
-  S1-02 | 3 pts | Backend + Database
+  S1-02 | Backend + Database
   Firebase project setup
   -----------------------------------------------------------------------
   AS A developer
@@ -44,7 +43,7 @@
     - .env.example file committed to repo
 
 
-  S1-03 | 5 pts | Frontend + Backend
+  S1-03 | Frontend + Backend
   User authentication — sign up / login / Google OAuth
   -----------------------------------------------------------------------
   AS A new user
@@ -65,7 +64,7 @@
   SO THAT I do not have to log in every time I use FuelEquity
 
 
-  S1-04 | 3 pts | Database
+  S1-04 | Database
   Firestore schema design
   -----------------------------------------------------------------------
   AS A developer
@@ -84,7 +83,7 @@
     - Schema documented in /docs/schema.md
 
 
-  S1-05 | 3 pts | Frontend
+  S1-05 | Frontend
   Bottom navigation shell + screen routing
   -----------------------------------------------------------------------
   AS A user
@@ -101,7 +100,7 @@
     - Back navigation works correctly on Android (hardware back button)
 
 
-  S1-06 | 2 pts | Frontend
+  S1-06 | Frontend
   User profile screen
   -----------------------------------------------------------------------
   AS A user
@@ -117,7 +116,7 @@
     - Changes persist after app restart
 
 
-  S1-07 | 8 pts | Backend + Database
+  S1-07 | Backend + Database
   Trip creation and rider invite system
   -----------------------------------------------------------------------
   AS A driver
@@ -141,7 +140,7 @@
     any manual setup
 
 
-  S1-08 | 5 pts | Frontend
+  S1-08 | Frontend
   Home dashboard — active trip card
   -----------------------------------------------------------------------
   AS A user
@@ -160,142 +159,11 @@
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SPRINT 2 — GAS PRICES & ECO ROUTING                                 32 pts
-  Goal: Live gas prices · Route comparison · Fuel calculator · Terrain model
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  S2-01 | 8 pts | API + Backend
-  Gas price API integration
-  -----------------------------------------------------------------------
-  AS A user
-  I WANT to see live gas prices at nearby stations when I am planning
-    or on a trip
-  SO THAT I can choose the cheapest fill-up option and reduce my
-    fuel costs on every trip
-
-  Acceptance Criteria:
-    - GasBuddy scraper or Kalibrate API connected to a Cloud Function
-    - Returns nearest 5 stations with price (¢/L), name, distance,
-      last-updated timestamp
-    - Prices cached in Firestore with 15-minute TTL to reduce API calls
-    - Fallback to NRCan weekly data if live source is unavailable
-    - Prices color-coded: green (cheapest), amber (mid), red (expensive)
-
-
-  S2-02 | 4 pts | Frontend
-  Nearby stations list and price display
-  -----------------------------------------------------------------------
-  AS A user
-  I WANT to see a list of nearby gas stations with their current price,
-    distance, and a 7-day price trend
-  SO THAT I can make an informed decision about where to fill up
-    and whether to wait for prices to drop
-
-  Acceptance Criteria:
-    - Station list sorted by price (cheapest first) by default
-    - Each row shows: station name, brand logo, price badge, distance,
-      last updated time
-    - 7-day trend sparkline per station (up/flat/down indicator)
-    - Pull-to-refresh updates prices
-    - "Live" indicator with animated dot shows data is fresh
-
-
-  S2-03 | 8 pts | API + Backend + AI
-  Eco vs fast route comparison engine
-  -----------------------------------------------------------------------
-  AS A driver planning a trip
-  I WANT the app to compare multiple route options by actual fuel cost —
-    not just distance or time — accounting for elevation and terrain
-  SO THAT I can choose the route that genuinely saves me the most
-    money, even if it is slightly longer
-
-  Acceptance Criteria:
-    - Google Maps Routes API returns 2-3 route options per trip
-    - Elevation profile fetched per route via Google Elevation API
-    - Terrain penalty model applied: +5% fuel consumption per
-      significant elevation gain segment
-    - Each route returns: distance (km), time (min), fuel litres,
-      fuel cost ($), terrain difficulty badge
-    - Recommended eco route highlighted with green badge
-    - Results saved to trip document in Firestore
-
-
-  S2-04 | 3 pts | Frontend
-  Route picker UI
-  -----------------------------------------------------------------------
-  AS A driver
-  I WANT to see eco and fast route options side by side and tap to
-    select which route my group will take
-  SO THAT the correct fuel cost is used in the trip's expense split
-
-  Acceptance Criteria:
-    - Two route cards displayed side by side
-    - Each card shows: label, distance, time, fuel litres, fuel cost,
-      terrain bar, and a short terrain description
-    - Recommended card has a green "Recommended" badge
-    - Tapping a card selects it and locks the route into the trip
-    - Selected route's fuel cost flows into the expense split calculation
-
-
-  S2-05 | 5 pts | AI + Backend
-  Fuel consumption model
-  -----------------------------------------------------------------------
-  AS A driver
-  I WANT the app to calculate my vehicle's fuel consumption accurately
-    by applying real-world modifiers on top of my base efficiency
-  SO THAT the fuel cost estimate in the split is as accurate as possible
-    and not just a simple distance calculation
-
-  Acceptance Criteria:
-    - Base L/100km pulled from user's vehicle profile
-    - Modifiers applied: terrain (+5%), traffic (+3%), cold temp
-      below 5°C (+4% cold-start penalty), headwind above 20 km/h (+2%)
-    - Final adjusted consumption stored on trip document
-    - Model recalculates if weather or route changes
-    - Modifier breakdown shown in a "Consumption factors" card on route screen
-
-
-  S2-06 | 2 pts | API
-  Weather API integration
-  -----------------------------------------------------------------------
-  AS A user
-  I WANT the app to factor in the weather forecast along my route into
-    the fuel cost estimate
-  SO THAT cold temperatures and headwinds do not cause my actual fuel
-    cost to be significantly higher than what was estimated
-
-  Acceptance Criteria:
-    - OpenWeatherMap API fetches temperature, wind speed, wind direction
-      for the trip's departure location and time
-    - Weather modifiers passed to fuel consumption model (S2-05)
-    - Forecast cached per route to avoid redundant API calls
-    - Weather conditions displayed in the consumption factors card
-
-
-  S2-07 | 2 pts | Frontend
-  Fuel cost simulator screen
-  -----------------------------------------------------------------------
-  AS A user
-  I WANT to use sliders to estimate the fuel cost of any hypothetical
-    trip before I create or join one
-  SO THAT I can quickly check if a trip is affordable and how much
-    I would save by carpooling vs driving alone
-
-  Acceptance Criteria:
-    - Sliders: distance (km), fuel efficiency (L/100km), terrain
-      penalty (%), traffic penalty (%), gas price (¢/L)
-    - Live output: litres needed, total fuel cost ($), CO₂ emitted (kg)
-    - Animated fuel gauge bar reflects consumption level
-    - "High consumption" warning shown when gauge exceeds 60%
-    - Carpool savings comparison: solo cost vs split cost shown side by side
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SPRINT 3 — EXPENSE SPLITTING & PAYMENTS                             36 pts
+  SPRINT 2 — EXPENSE SPLITTING & PAYMENTS                       
   Goal: Add expenses · Equal split · Stripe payments · Status · Notifications
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  S3-01 | 5 pts | Frontend + Backend + Database
+  S2-01 | Frontend + Backend + Database
   Add expense flow
   -----------------------------------------------------------------------
   AS A driver or rider
@@ -318,7 +186,7 @@
     without having to ask the driver
 
 
-  S3-02 | 6 pts | AI + Frontend
+  S2-02 | AI + Frontend
   AI receipt scanner
   -----------------------------------------------------------------------
   AS A user
@@ -336,7 +204,7 @@
     - If extraction fails, form is blank and user is notified gracefully
 
 
-  S3-03 | 8 pts | API + Backend
+  S2-03 | API + Backend
   Stripe Connect integration
   -----------------------------------------------------------------------
   AS A driver
@@ -359,7 +227,7 @@
     to sign up for any external payment service
 
 
-  S3-04 | 4 pts | Frontend
+  S2-04 | Frontend
   Splits screen — per-rider breakdown
   -----------------------------------------------------------------------
   AS A driver
@@ -381,7 +249,7 @@
   SO THAT I understand exactly what each charge covers before I pay
 
 
-  S3-05 | 5 pts | Frontend + Backend
+  S2-05 | Frontend + Backend
   In-app payment request and tracking
   -----------------------------------------------------------------------
   AS A driver
@@ -406,7 +274,7 @@
   SO THAT settling my share is as fast and frictionless as possible
 
 
-  S3-06 | 5 pts | API + Backend
+  S2-06 | API + Backend
   407 ETR toll calculator
   -----------------------------------------------------------------------
   AS A driver planning a trip that may use the 407 ETR
@@ -424,7 +292,7 @@
     - Toll expense split equally among all riders like any other expense
 
 
-  S3-07 | 3 pts | Backend
+  S2-07 | Backend
   Push notification system
   -----------------------------------------------------------------------
   AS A rider
@@ -445,13 +313,143 @@
   I WANT to receive a notification when a rider completes their payment
   SO THAT I know immediately when my outstanding balance is reduced
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 3 — GAS PRICES & ECO ROUTING                               
+  Goal: Live gas prices · Route comparison · Fuel calculator · Terrain model
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S3-01 | API + Backend
+  Gas price API integration
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see live gas prices at nearby stations when I am planning
+    or on a trip
+  SO THAT I can choose the cheapest fill-up option and reduce my
+    fuel costs on every trip
+
+  Acceptance Criteria:
+    - GasBuddy scraper or Kalibrate API connected to a Cloud Function
+    - Returns nearest 5 stations with price (¢/L), name, distance,
+      last-updated timestamp
+    - Prices cached in Firestore with 15-minute TTL to reduce API calls
+    - Fallback to NRCan weekly data if live source is unavailable
+    - Prices color-coded: green (cheapest), amber (mid), red (expensive)
+
+
+  S3-02 | Frontend
+  Nearby stations list and price display
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see a list of nearby gas stations with their current price,
+    distance, and a 7-day price trend
+  SO THAT I can make an informed decision about where to fill up
+    and whether to wait for prices to drop
+
+  Acceptance Criteria:
+    - Station list sorted by price (cheapest first) by default
+    - Each row shows: station name, brand logo, price badge, distance,
+      last updated time
+    - 7-day trend sparkline per station (up/flat/down indicator)
+    - Pull-to-refresh updates prices
+    - "Live" indicator with animated dot shows data is fresh
+
+
+  S3-03 | API + Backend + AI
+  Eco vs fast route comparison engine
+  -----------------------------------------------------------------------
+  AS A driver planning a trip
+  I WANT the app to compare multiple route options by actual fuel cost —
+    not just distance or time — accounting for elevation and terrain
+  SO THAT I can choose the route that genuinely saves me the most
+    money, even if it is slightly longer
+
+  Acceptance Criteria:
+    - Google Maps Routes API returns 2-3 route options per trip
+    - Elevation profile fetched per route via Google Elevation API
+    - Terrain penalty model applied: +5% fuel consumption per
+      significant elevation gain segment
+    - Each route returns: distance (km), time (min), fuel litres,
+      fuel cost ($), terrain difficulty badge
+    - Recommended eco route highlighted with green badge
+    - Results saved to trip document in Firestore
+
+
+  S3-04 | Frontend
+  Route picker UI
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to see eco and fast route options side by side and tap to
+    select which route my group will take
+  SO THAT the correct fuel cost is used in the trip's expense split
+
+  Acceptance Criteria:
+    - Two route cards displayed side by side
+    - Each card shows: label, distance, time, fuel litres, fuel cost,
+      terrain bar, and a short terrain description
+    - Recommended card has a green "Recommended" badge
+    - Tapping a card selects it and locks the route into the trip
+    - Selected route's fuel cost flows into the expense split calculation
+
+
+  S3-05 | AI + Backend
+  Fuel consumption model
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT the app to calculate my vehicle's fuel consumption accurately
+    by applying real-world modifiers on top of my base efficiency
+  SO THAT the fuel cost estimate in the split is as accurate as possible
+    and not just a simple distance calculation
+
+  Acceptance Criteria:
+    - Base L/100km pulled from user's vehicle profile
+    - Modifiers applied: terrain (+5%), traffic (+3%), cold temp
+      below 5°C (+4% cold-start penalty), headwind above 20 km/h (+2%)
+    - Final adjusted consumption stored on trip document
+    - Model recalculates if weather or route changes
+    - Modifier breakdown shown in a "Consumption factors" card on route screen
+
+
+  S3-06 | API
+  Weather API integration
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT the app to factor in the weather forecast along my route into
+    the fuel cost estimate
+  SO THAT cold temperatures and headwinds do not cause my actual fuel
+    cost to be significantly higher than what was estimated
+
+  Acceptance Criteria:
+    - OpenWeatherMap API fetches temperature, wind speed, wind direction
+      for the trip's departure location and time
+    - Weather modifiers passed to fuel consumption model (S2-05)
+    - Forecast cached per route to avoid redundant API calls
+    - Weather conditions displayed in the consumption factors card
+
+
+  S3-07 | Frontend
+  Fuel cost simulator screen
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to use sliders to estimate the fuel cost of any hypothetical
+    trip before I create or join one
+  SO THAT I can quickly check if a trip is affordable and how much
+    I would save by carpooling vs driving alone
+
+  Acceptance Criteria:
+    - Sliders: distance (km), fuel efficiency (L/100km), terrain
+      penalty (%), traffic penalty (%), gas price (¢/L)
+    - Live output: litres needed, total fuel cost ($), CO₂ emitted (kg)
+    - Animated fuel gauge bar reflects consumption level
+    - "High consumption" warning shown when gauge exceeds 60%
+    - Carpool savings comparison: solo cost vs split cost shown side by side
+
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SPRINT 4 — AI FEATURES & GREENMILES                                 28 pts
+  SPRINT 4 — AI FEATURES & GREENMILES                                 
   Goal: Fuel Burden Index · AI insights · GreenMiles wallet · Carbon tracking
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  S4-01 | 4 pts | AI + Backend
+  S4-01 | AI + Backend
   Fuel Burden Index calculator
   -----------------------------------------------------------------------
   AS A user who is budget-conscious
@@ -469,7 +467,7 @@
     - Score updates dynamically when trip expenses change
 
 
-  S4-02 | 5 pts | AI + Backend
+  S4-02 | AI + Backend
   Claude AI insight engine
   -----------------------------------------------------------------------
   AS A user
@@ -489,7 +487,7 @@
     - Graceful fallback if Claude API is unavailable
 
 
-  S4-03 | 5 pts | AI + Backend
+  S4-03 | AI + Backend
   Predictive gas price alert system
   -----------------------------------------------------------------------
   AS A frequent driver in Ontario
@@ -508,7 +506,7 @@
     - Prediction accuracy tracked and logged for future improvement
 
 
-  S4-04 | 4 pts | Backend + Database + Frontend
+  S4-04 | Backend + Database + Frontend
   GreenMiles points ledger
   -----------------------------------------------------------------------
   AS A user who chooses eco-friendly options
@@ -533,7 +531,7 @@
   SO THAT making the sustainable choice is always rewarded passively
 
 
-  S4-05 | 3 pts | Frontend
+  S4-05 | Frontend
   GreenMiles wallet screen
   -----------------------------------------------------------------------
   AS A user
@@ -553,7 +551,7 @@
     - Screen updates in real-time via Firestore listener
 
 
-  S4-06 | 3 pts | Backend + AI
+  S4-06 | Backend + AI
   CO₂ tracking and avoided emissions
   -----------------------------------------------------------------------
   AS A user who cares about the environment
@@ -571,7 +569,7 @@
     - Community total CO₂ avoided shown on GreenMiles screen
 
 
-  S4-07 | 4 pts | Frontend + Backend
+  S4-07 | Frontend + Backend
   GreenMiles redemption flow
   -----------------------------------------------------------------------
   AS A user with enough GreenMiles
@@ -591,11 +589,11 @@
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SPRINT 5 — POLISH, COMMUNITY & DEMO                                 18 pts
+  SPRINT 5 — POLISH, COMMUNITY & DEMO                               
   Goal: Trip history · Community feed · Onboarding · Performance · Demo prep
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  S5-01 | 3 pts | Frontend + Database
+  S5-01 | Frontend + Database
   Trip history and receipts
   -----------------------------------------------------------------------
   AS A user
@@ -614,7 +612,7 @@
     - Trip summary shareable as a PDF or link
 
 
-  S5-02 | 3 pts | Frontend + Backend
+  S5-02 | Frontend + Backend
   Community savings live counter
   -----------------------------------------------------------------------
   AS A user on the home screen
@@ -632,7 +630,7 @@
       — join the movement" for social sharing
 
 
-  S5-03 | 2 pts | Frontend
+  S5-03 | Frontend
   Onboarding walkthrough
   -----------------------------------------------------------------------
   AS A brand-new user opening FuelEquity for the first time
@@ -651,7 +649,7 @@
     - Onboarding only shown once (flagged in Firestore after completion)
 
 
-  S5-04 | 3 pts | Frontend + Backend
+  S5-04 | Frontend + Backend
   Crowdsourced gas price reporting
   -----------------------------------------------------------------------
   AS A user who just filled up at a gas station
@@ -670,7 +668,7 @@
     - Reports older than 2 hours are marked as "unverified"
 
 
-  S5-05 | 2 pts | Frontend
+  S5-05 | Frontend
   Hackathon demo mode
   -----------------------------------------------------------------------
   AS A hackathon judge or demo viewer
@@ -690,7 +688,7 @@
     - Demo mode banner shown discreetly so judges know it is a demo
 
 
-  S5-06 | 3 pts | Backend
+  S5-06 | Backend
   Performance and offline support
   -----------------------------------------------------------------------
   AS A user in an area with poor cell reception (common on Ontario
@@ -710,7 +708,7 @@
     - Loading skeletons shown while data fetches, not blank screens
 
 
-  S5-07 | 2 pts | Frontend + Backend
+  S5-07 | Frontend + Backend
   Error handling and edge cases
   -----------------------------------------------------------------------
   AS A user
@@ -736,14 +734,14 @@
   SUMMARY
 ================================================================================
 
-  Sprint 1 — Foundation & Auth             34 pts    8 user stories
-  Sprint 2 — Gas Prices & Eco Routing      32 pts    7 user stories
-  Sprint 3 — Expense Splitting & Payments  36 pts    7 user stories
-  Sprint 4 — AI Features & GreenMiles      28 pts    7 user stories
-  Sprint 5 — Polish, Community & Demo      18 pts    7 user stories
-                                          -------   ----------------
-  TOTAL                                   148 pts   36 user stories
-                                                    (48 sub-features)
+  Sprint 1 — Foundation & Auth                 8 user stories
+  Sprint 2 — Expense Splitting & Payments      7 user stories
+  Sprint 3 — Gas Prices & Eco Routing          7 user stories
+  Sprint 4 — AI Features & GreenMiles          7 user stories
+  Sprint 5 — Polish, Community & Demo          7 user stories
+                                           -----------------------
+  TOTAL                                      36 user stories
+                                            (48 sub-features)
 
   MVP demo-ready milestone: End of Sprint 3
   Hackathon winner features: Sprints 4 and 5
