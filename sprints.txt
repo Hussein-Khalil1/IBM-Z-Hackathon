@@ -24,7 +24,7 @@
     - Folder structure: /screens /components /hooks /services /utils /assets
     - Core packages installed: react-navigation, firebase, axios,
       @stripe/stripe-react-native, zustand (state management)
-    - Dark theme tokens defined globally (colors, fonts, spacing)
+    - Dark theme defined globally (colors, fonts, spacing)
     - Runs on iOS simulator and Android emulator without errors
 
 
@@ -746,7 +746,7 @@
   MVP demo-ready milestone: End of Sprint 3
   Hackathon winner features: Sprints 4 and 5
 
-  
+
 Tech stack:
     Mobile:    Expo (React Native) + TypeScript
     Auth:      Firebase Auth (Email + Google OAuth)
