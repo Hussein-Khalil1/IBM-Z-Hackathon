@@ -1,0 +1,768 @@
+================================================================================
+  FUELEQUITY — SPRINT PLAN & USER STORIES
+  Financial Inclusion · Climate Impact · Community-Powered Trip Economics
+  Total: 5 Sprints · 48 Features · 148 Story Points
+================================================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 1 — FOUNDATION & AUTH                                        34 pts
+  Goal: Project scaffold · User auth · Navigation shell · DB schema
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S1-01 | 5 pts | Frontend + Backend
+  Expo + React Native project scaffold
+  -----------------------------------------------------------------------
+  AS A developer
+  I WANT to initialize a fully configured Expo + React Native project
+    with TypeScript, folder structure (screens, components, hooks,
+    services), and core dependencies installed
+  SO THAT the team has a clean, consistent codebase to build on from
+    day one of the hackathon
+
+  Acceptance Criteria:
+    - Expo project initializes with TypeScript template
+    - Folder structure: /screens /components /hooks /services /utils /assets
+    - Core packages installed: react-navigation, firebase, axios,
+      @stripe/stripe-react-native, zustand (state management)
+    - Dark theme tokens defined globally (colors, fonts, spacing)
+    - Runs on iOS simulator and Android emulator without errors
+
+
+  S1-02 | 3 pts | Backend + Database
+  Firebase project setup
+  -----------------------------------------------------------------------
+  AS A developer
+  I WANT a Firebase project configured with Auth, Firestore, Cloud
+    Functions, and FCM for both dev and prod environments
+  SO THAT all backend services are ready before any feature is built
+
+  Acceptance Criteria:
+    - Firebase project created with dev and prod environments
+    - Firebase Auth, Firestore, Cloud Functions, and FCM enabled
+    - Firebase config injected via environment variables (not hardcoded)
+    - .env.example file committed to repo
+
+
+  S1-03 | 5 pts | Frontend + Backend
+  User authentication — sign up / login / Google OAuth
+  -----------------------------------------------------------------------
+  AS A new user
+  I WANT to create an account using my email and password or Google
+    one-tap sign-in
+  SO THAT I can securely access FuelEquity and my data is tied to my
+    identity across devices
+
+  Acceptance Criteria:
+    - Email + password registration with validation
+    - Google one-tap OAuth sign-in works on iOS and Android
+    - Persistent session — user stays logged in after app close
+    - Auth errors display human-readable messages (not Firebase codes)
+    - Password reset email flow works
+
+  AS A returning user
+  I WANT my session to persist when I reopen the app
+  SO THAT I do not have to log in every time I use FuelEquity
+
+
+  S1-04 | 3 pts | Database
+  Firestore schema design
+  -----------------------------------------------------------------------
+  AS A developer
+  I WANT a well-designed Firestore schema with defined collections,
+    indexes, and security rules
+  SO THAT data is structured consistently and securely before any
+    feature writes to the database
+
+  Acceptance Criteria:
+    - Collections defined: users, trips, expenses, riders,
+      greenMiles, gasReports
+    - Security rules written: users can only read/write their own
+      data; trip members can read shared trip data
+    - Indexes created for common queries (trips by userId, expenses
+      by tripId)
+    - Schema documented in /docs/schema.md
+
+
+  S1-05 | 3 pts | Frontend
+  Bottom navigation shell + screen routing
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT a clear bottom navigation bar with Home, Splits, Add Expense,
+    and GreenMiles tabs
+  SO THAT I can move between the core features of the app quickly
+    and intuitively
+
+  Acceptance Criteria:
+    - Tab navigator renders all 4 main tabs
+    - Stack navigators set up per tab for nested screens
+    - Active tab icon highlighted in green (#4ade80)
+    - Navigation works without errors between all tabs
+    - Back navigation works correctly on Android (hardware back button)
+
+
+  S1-06 | 2 pts | Frontend
+  User profile screen
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to view and edit my profile including my name, vehicle type,
+    and fuel efficiency (L/100km)
+  SO THAT the app can calculate accurate fuel costs specific to my car
+
+  Acceptance Criteria:
+    - Profile screen shows name, avatar initials, vehicle, efficiency
+    - User can edit all fields and save to Firestore
+    - Notification preference toggle (on/off)
+    - Currency selector (CAD default)
+    - Changes persist after app restart
+
+
+  S1-07 | 8 pts | Backend + Database
+  Trip creation and rider invite system
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to create a new trip with a destination, date, and rider count
+    and then invite riders via a shareable link or code
+  SO THAT my passengers can join the trip and be included in all
+    expense splits automatically
+
+  Acceptance Criteria:
+    - Driver can create a trip with: name, origin, destination, date,
+      vehicle, estimated route
+    - A unique 6-character invite code is generated per trip
+    - Shareable deep link generated (e.g. fuelequity.app/join/ABC123)
+    - Riders who tap the link are taken to a join confirmation screen
+    - On join, rider is added to trip's riders sub-collection in Firestore
+    - Driver sees rider avatars appear in real-time as they join
+
+  AS A rider
+  I WANT to join a trip using an invite code or link shared by the driver
+  SO THAT I am automatically included in the cost split without
+    any manual setup
+
+
+  S1-08 | 5 pts | Frontend
+  Home dashboard — active trip card
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see my active trip on the home screen with the total cost,
+    per-person share, and rider status at a glance
+  SO THAT I always know where the trip finances stand without
+    navigating into sub-screens
+
+  Acceptance Criteria:
+    - Active trip card shows: trip name, route, rider avatars,
+      total cost, per-person share
+    - Real-time Firestore listener updates cost as expenses are added
+    - Rider avatars show green checkmark when they have paid
+    - Empty state shown when no active trip exists with CTA to create one
+    - Tapping the card navigates to the full trip detail screen
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 2 — GAS PRICES & ECO ROUTING                                 32 pts
+  Goal: Live gas prices · Route comparison · Fuel calculator · Terrain model
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S2-01 | 8 pts | API + Backend
+  Gas price API integration
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see live gas prices at nearby stations when I am planning
+    or on a trip
+  SO THAT I can choose the cheapest fill-up option and reduce my
+    fuel costs on every trip
+
+  Acceptance Criteria:
+    - GasBuddy scraper or Kalibrate API connected to a Cloud Function
+    - Returns nearest 5 stations with price (¢/L), name, distance,
+      last-updated timestamp
+    - Prices cached in Firestore with 15-minute TTL to reduce API calls
+    - Fallback to NRCan weekly data if live source is unavailable
+    - Prices color-coded: green (cheapest), amber (mid), red (expensive)
+
+
+  S2-02 | 4 pts | Frontend
+  Nearby stations list and price display
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see a list of nearby gas stations with their current price,
+    distance, and a 7-day price trend
+  SO THAT I can make an informed decision about where to fill up
+    and whether to wait for prices to drop
+
+  Acceptance Criteria:
+    - Station list sorted by price (cheapest first) by default
+    - Each row shows: station name, brand logo, price badge, distance,
+      last updated time
+    - 7-day trend sparkline per station (up/flat/down indicator)
+    - Pull-to-refresh updates prices
+    - "Live" indicator with animated dot shows data is fresh
+
+
+  S2-03 | 8 pts | API + Backend + AI
+  Eco vs fast route comparison engine
+  -----------------------------------------------------------------------
+  AS A driver planning a trip
+  I WANT the app to compare multiple route options by actual fuel cost —
+    not just distance or time — accounting for elevation and terrain
+  SO THAT I can choose the route that genuinely saves me the most
+    money, even if it is slightly longer
+
+  Acceptance Criteria:
+    - Google Maps Routes API returns 2-3 route options per trip
+    - Elevation profile fetched per route via Google Elevation API
+    - Terrain penalty model applied: +5% fuel consumption per
+      significant elevation gain segment
+    - Each route returns: distance (km), time (min), fuel litres,
+      fuel cost ($), terrain difficulty badge
+    - Recommended eco route highlighted with green badge
+    - Results saved to trip document in Firestore
+
+
+  S2-04 | 3 pts | Frontend
+  Route picker UI
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to see eco and fast route options side by side and tap to
+    select which route my group will take
+  SO THAT the correct fuel cost is used in the trip's expense split
+
+  Acceptance Criteria:
+    - Two route cards displayed side by side
+    - Each card shows: label, distance, time, fuel litres, fuel cost,
+      terrain bar, and a short terrain description
+    - Recommended card has a green "Recommended" badge
+    - Tapping a card selects it and locks the route into the trip
+    - Selected route's fuel cost flows into the expense split calculation
+
+
+  S2-05 | 5 pts | AI + Backend
+  Fuel consumption model
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT the app to calculate my vehicle's fuel consumption accurately
+    by applying real-world modifiers on top of my base efficiency
+  SO THAT the fuel cost estimate in the split is as accurate as possible
+    and not just a simple distance calculation
+
+  Acceptance Criteria:
+    - Base L/100km pulled from user's vehicle profile
+    - Modifiers applied: terrain (+5%), traffic (+3%), cold temp
+      below 5°C (+4% cold-start penalty), headwind above 20 km/h (+2%)
+    - Final adjusted consumption stored on trip document
+    - Model recalculates if weather or route changes
+    - Modifier breakdown shown in a "Consumption factors" card on route screen
+
+
+  S2-06 | 2 pts | API
+  Weather API integration
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT the app to factor in the weather forecast along my route into
+    the fuel cost estimate
+  SO THAT cold temperatures and headwinds do not cause my actual fuel
+    cost to be significantly higher than what was estimated
+
+  Acceptance Criteria:
+    - OpenWeatherMap API fetches temperature, wind speed, wind direction
+      for the trip's departure location and time
+    - Weather modifiers passed to fuel consumption model (S2-05)
+    - Forecast cached per route to avoid redundant API calls
+    - Weather conditions displayed in the consumption factors card
+
+
+  S2-07 | 2 pts | Frontend
+  Fuel cost simulator screen
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to use sliders to estimate the fuel cost of any hypothetical
+    trip before I create or join one
+  SO THAT I can quickly check if a trip is affordable and how much
+    I would save by carpooling vs driving alone
+
+  Acceptance Criteria:
+    - Sliders: distance (km), fuel efficiency (L/100km), terrain
+      penalty (%), traffic penalty (%), gas price (¢/L)
+    - Live output: litres needed, total fuel cost ($), CO₂ emitted (kg)
+    - Animated fuel gauge bar reflects consumption level
+    - "High consumption" warning shown when gauge exceeds 60%
+    - Carpool savings comparison: solo cost vs split cost shown side by side
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 3 — EXPENSE SPLITTING & PAYMENTS                             36 pts
+  Goal: Add expenses · Equal split · Stripe payments · Status · Notifications
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S3-01 | 5 pts | Frontend + Backend + Database
+  Add expense flow
+  -----------------------------------------------------------------------
+  AS A driver or rider
+  I WANT to add a new expense to the trip by selecting a category,
+    entering the amount, and optionally adding a note
+  SO THAT every cost (fuel, toll, parking, meal) is tracked in real-time
+    and automatically split equally among all riders
+
+  Acceptance Criteria:
+    - Category picker: Fuel, Toll (407 ETR), Parking, Meal
+    - Amount input shows live per-person preview as user types
+    - Optional note field (e.g. "Tim Hortons on Hwy 401")
+    - On submit, expense saved to Firestore expenses sub-collection
+    - All riders receive a real-time update on their home screen
+    - Per-person total on home dashboard updates immediately
+
+  AS A rider
+  I WANT to see the expense immediately after the driver adds it
+  SO THAT I always know the current state of the trip budget
+    without having to ask the driver
+
+
+  S3-02 | 6 pts | AI + Frontend
+  AI receipt scanner
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to take a photo of a receipt and have the app automatically
+    extract the merchant name, amount, and category
+  SO THAT I do not have to manually type in expense details, which
+    saves time especially when adding multiple stops on a long trip
+
+  Acceptance Criteria:
+    - Camera capture and photo library upload both supported
+    - Image sent to Claude Vision API via a Cloud Function
+    - Claude extracts: merchant name, total amount, suggested category
+    - Extracted data pre-fills the add expense form
+    - User can review and edit all fields before confirming
+    - If extraction fails, form is blank and user is notified gracefully
+
+
+  S3-03 | 8 pts | API + Backend
+  Stripe Connect integration
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to connect my bank account to FuelEquity once so that I can
+    receive payments from riders directly into my bank account
+  SO THAT I do not have to chase people for cash or use a separate
+    app like e-Transfer after every trip
+
+  Acceptance Criteria:
+    - Stripe Express onboarding launched in-app via Account Links API
+    - Driver completes KYC (name, DOB, bank account) in ~3 minutes
+    - stripeAccountId stored securely in Firestore user document
+    - Stripe webhooks handled by Cloud Function for account verification
+    - Driver sees a "Bank connected" confirmation badge in their profile
+    - Stripe test mode works end-to-end before production keys are used
+
+  AS A rider
+  I WANT to pay my share using Apple Pay, Google Pay, or a credit card
+  SO THAT I can settle my portion of the trip quickly without needing
+    to sign up for any external payment service
+
+
+  S3-04 | 4 pts | Frontend
+  Splits screen — per-rider breakdown
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to see a breakdown of every rider's share with their payment
+    status clearly shown (paid vs pending)
+  SO THAT I know exactly who still owes me money and how much
+    is still outstanding from the trip
+
+  Acceptance Criteria:
+    - Each rider shown in their own card with avatar and name
+    - Itemized breakdown per rider: fuel, toll, parking, meals subtotals
+    - Paid riders show green "Paid · [time] ago" status
+    - Pending riders show amber "Owes $XX.XX" status
+    - Driver card shows total incoming amount still to be collected
+    - List updates in real-time via Firestore listener
+
+  AS A rider
+  I WANT to see my own itemized breakdown of what I owe
+  SO THAT I understand exactly what each charge covers before I pay
+
+
+  S3-05 | 5 pts | Frontend + Backend
+  In-app payment request and tracking
+  -----------------------------------------------------------------------
+  AS A driver
+  I WANT to tap "Request payment" on a rider's card to send them
+    a payment request they can complete in-app
+  SO THAT collecting money from riders is one tap rather than
+    sending manual messages or reminders
+
+  Acceptance Criteria:
+    - Tapping "Request payment" creates a Stripe PaymentIntent via
+      Cloud Function for that rider's exact share amount
+    - FCM push notification sent to rider with amount and trip name
+    - Rider sees a payment request card in their app on next open
+    - Rider taps Pay — Apple Pay sheet (or card form) appears
+    - Face ID / Touch ID authenticates the payment in one step
+    - On success, Stripe routes funds to driver's connected account
+    - Driver's splits screen updates rider status to "Paid" in real-time
+
+  AS A rider
+  I WANT to receive a push notification when the driver requests payment
+    and pay in one tap using Apple Pay
+  SO THAT settling my share is as fast and frictionless as possible
+
+
+  S3-06 | 5 pts | API + Backend
+  407 ETR toll calculator
+  -----------------------------------------------------------------------
+  AS A driver planning a trip that may use the 407 ETR
+  I WANT the app to automatically calculate the toll cost and show
+    me whether avoiding the 407 is cheaper overall
+  SO THAT my group is not surprised by a large toll bill and can make
+    an informed routing decision before the trip starts
+
+  Acceptance Criteria:
+    - TollGuru API called for routes that pass through 407 ETR corridor
+    - Toll cost calculated based on entry/exit points and vehicle class
+    - Toll-inclusive and toll-free route costs shown side by side
+    - Toll cost added as a pre-populated expense when 407 route is selected
+    - "Skip 407 — save $12.40" suggestion shown when toll-free is cheaper
+    - Toll expense split equally among all riders like any other expense
+
+
+  S3-07 | 3 pts | Backend
+  Push notification system
+  -----------------------------------------------------------------------
+  AS A rider
+  I WANT to receive push notifications when a new expense is added,
+    when a payment is requested, and when my payment is confirmed
+  SO THAT I am always kept in the loop on the trip finances without
+    having to constantly check the app
+
+  Acceptance Criteria:
+    - FCM notifications triggered by Cloud Function Firestore listeners
+    - Notification types: new expense added, payment requested,
+      payment received, reminder sent by driver
+    - Notification tapped → opens relevant screen in app (deep link)
+    - Per-user notification preferences respected (on/off per type)
+    - Notifications work when app is in background and fully closed
+
+  AS A driver
+  I WANT to receive a notification when a rider completes their payment
+  SO THAT I know immediately when my outstanding balance is reduced
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 4 — AI FEATURES & GREENMILES                                 28 pts
+  Goal: Fuel Burden Index · AI insights · GreenMiles wallet · Carbon tracking
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S4-01 | 4 pts | AI + Backend
+  Fuel Burden Index calculator
+  -----------------------------------------------------------------------
+  AS A user who is budget-conscious
+  I WANT to see what percentage of my daily income this trip's fuel
+    cost represents, compared to the Ontario average
+  SO THAT I understand the real financial impact of fuel on my life
+    and can make smarter decisions about when to carpool or take transit
+
+  Acceptance Criteria:
+    - Optional income bracket input shown during onboarding or profile setup
+    - Fuel spend calculated as % of estimated daily income
+    - Score compared to Ontario average (4.2% baseline)
+    - Result displayed as Low / Moderate / High with colour coding
+    - Shown prominently on GreenMiles screen
+    - Score updates dynamically when trip expenses change
+
+
+  S4-02 | 5 pts | AI + Backend
+  Claude AI insight engine
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see a short, personalized AI-generated insight on my home
+    screen that tells me something useful about this trip's costs
+  SO THAT I get genuine value from the app beyond just seeing numbers —
+    the AI helps me take action to save money
+
+  Acceptance Criteria:
+    - Claude API called with trip context: route, gas prices,
+      expenses, rider count, vs-average benchmarks
+    - Insight generated as 1-2 sentences, shown in an "AI insight" card
+    - Example insights: "Filling up at Costco saves your group $29 vs Shell"
+      or "Your group is travelling 23% cheaper than average Ontario drivers"
+    - Insight refreshes when significant new expense is added
+    - Insight card shows "AI" badge and sparkle icon
+    - Graceful fallback if Claude API is unavailable
+
+
+  S4-03 | 5 pts | AI + Backend
+  Predictive gas price alert system
+  -----------------------------------------------------------------------
+  AS A frequent driver in Ontario
+  I WANT to receive a push notification when gas prices on my regular
+    route are predicted to rise in the next 3 days
+  SO THAT I can fill up early at a lower price and save money
+    without having to check the app every day
+
+  Acceptance Criteria:
+    - Cloud Function runs daily, analyses 7-day price history per region
+    - AI predicts next 3-day price movement (up / flat / down)
+    - Push notification sent when significant rise predicted (>3¢/L)
+    - Notification includes: predicted rise amount, recommended station,
+      estimated savings if user fills up today vs Friday
+    - User can disable price alerts in notification preferences
+    - Prediction accuracy tracked and logged for future improvement
+
+
+  S4-04 | 4 pts | Backend + Database + Frontend
+  GreenMiles points ledger
+  -----------------------------------------------------------------------
+  AS A user who chooses eco-friendly options
+  I WANT to earn GreenMiles points for every sustainable choice I make —
+    like taking the eco route or carpooling with multiple riders
+  SO THAT my positive environmental and financial decisions are
+    recognized and rewarded with tangible value
+
+  Acceptance Criteria:
+    - Points awarded automatically by Cloud Function triggers:
+        Eco route selected:    +50 GreenMiles
+        Per carpool rider:     +30 GreenMiles each
+        Low-emission trip:     +20 GreenMiles
+        Price report submitted: +10 GreenMiles
+    - Points stored in user.greenMiles field in Firestore
+    - Full earn/spend history logged in greenMiles sub-collection
+    - Points balance visible in real-time on GreenMiles screen
+    - Points cannot go below zero
+
+  AS A driver who chose the eco route
+  I WANT to automatically receive GreenMiles without any extra steps
+  SO THAT making the sustainable choice is always rewarded passively
+
+
+  S4-05 | 3 pts | Frontend
+  GreenMiles wallet screen
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see my GreenMiles balance, how close I am to my next
+    reward tier, my earning history, and the community impact
+    my trips have generated
+  SO THAT I feel motivated to keep making eco and carpool choices
+    because I can see the real impact they have
+
+  Acceptance Criteria:
+    - Balance shown in large format with approximate dollar value
+    - Progress bar to next reward tier with points remaining labelled
+    - Earn history list: each event with date, action, points earned
+    - Community impact counters: total $ saved, CO₂ avoided,
+      trips split, donations made — all from real Firestore aggregates
+    - Redeem button opens redemption flow (S4-07)
+    - Screen updates in real-time via Firestore listener
+
+
+  S4-06 | 3 pts | Backend + AI
+  CO₂ tracking and avoided emissions
+  -----------------------------------------------------------------------
+  AS A user who cares about the environment
+  I WANT to see how much CO₂ my carpooling saved compared to everyone
+    in the group driving solo, and how that adds up across the community
+  SO THAT I can see the tangible environmental impact of using
+    FuelEquity rather than just a dollar figure
+
+  Acceptance Criteria:
+    - CO₂ per trip calculated: fuel litres × 2.31 kg/L
+    - Solo trip CO₂ calculated for comparison (riders × solo consumption)
+    - Avoided CO₂ = solo total − actual carpool CO₂
+    - "Equivalent to planting X trees" conversion displayed (1 tree = 21 kg)
+    - Per-user lifetime CO₂ avoided accumulated in Firestore
+    - Community total CO₂ avoided shown on GreenMiles screen
+
+
+  S4-07 | 4 pts | Frontend + Backend
+  GreenMiles redemption flow
+  -----------------------------------------------------------------------
+  AS A user with enough GreenMiles
+  I WANT to redeem my points for a real reward — like a gas discount
+    code, a transit pass credit, or a donation to a fuel assistance fund
+  SO THAT the GreenMiles I earn have genuine financial and social value
+    and are not just a gamification number
+
+  Acceptance Criteria:
+    - Redemption options: gas discount code, transit credit, donate
+      to community fuel assistance fund
+    - Minimum balance required shown per redemption type
+    - On confirm, points deducted from ledger immediately
+    - Redemption confirmation screen with code or receipt shown
+    - Transaction logged in greenMiles history
+    - Donated amount shown in community impact counter on wallet screen
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SPRINT 5 — POLISH, COMMUNITY & DEMO                                 18 pts
+  Goal: Trip history · Community feed · Onboarding · Performance · Demo prep
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  S5-01 | 3 pts | Frontend + Database
+  Trip history and receipts
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT to see a list of all my past trips with their total cost,
+    rider count, and date, and be able to tap into each one to see
+    the full expense breakdown
+  SO THAT I have a complete financial record of all my road trips
+    and can reference past splits if there is ever a dispute
+
+  Acceptance Criteria:
+    - Trip history list sorted by most recent first
+    - Each row shows: trip name, route, date, total cost, rider count
+    - Tapping a trip opens full expense breakdown with each rider's
+      contribution and payment status
+    - Past trips are read-only (cannot add expenses to completed trips)
+    - Trip summary shareable as a PDF or link
+
+
+  S5-02 | 3 pts | Frontend + Backend
+  Community savings live counter
+  -----------------------------------------------------------------------
+  AS A user on the home screen
+  I WANT to see a live counter of the total money FuelEquity users
+    in Ontario have saved by carpooling and choosing eco routes
+  SO THAT I feel part of a larger movement and am motivated to keep
+    using the app because I can see its collective impact
+
+  Acceptance Criteria:
+    - Real-time Firestore listener on a community aggregate document
+    - Counter updates within 5 seconds when any user completes a trip
+    - Displayed on home screen below the active trip card
+    - Animated number tick when counter increases
+    - Shareable stat card: "FuelEquity users have saved $X this month
+      — join the movement" for social sharing
+
+
+  S5-03 | 2 pts | Frontend
+  Onboarding walkthrough
+  -----------------------------------------------------------------------
+  AS A brand-new user opening FuelEquity for the first time
+  I WANT a brief illustrated walkthrough that explains what the app
+    does across 3 screens before I sign up
+  SO THAT I immediately understand the value of the app and am
+    motivated to create an account
+
+  Acceptance Criteria:
+    - 3 illustrated intro screens: "Split trips", "Save money", "Go green"
+    - Each screen has a title, one-line description, and illustration
+    - Skip button available on all screens
+    - Vehicle setup wizard runs immediately after account creation
+    - Permission prompts for location and notifications shown
+      with clear explanations of why each is needed
+    - Onboarding only shown once (flagged in Firestore after completion)
+
+
+  S5-04 | 3 pts | Frontend + Backend
+  Crowdsourced gas price reporting
+  -----------------------------------------------------------------------
+  AS A user who just filled up at a gas station
+  I WANT to report the current price I paid so that other FuelEquity
+    users in my area see accurate, up-to-date prices
+  SO THAT the community collectively maintains better price data than
+    any single data source could provide
+
+  Acceptance Criteria:
+    - "Report price" button on the nearby stations screen
+    - User selects station, enters price per litre, confirms
+    - Report saved to gasReports collection in Firestore
+    - Reporter awarded +10 GreenMiles automatically
+    - Other users can upvote a price as accurate or flag as incorrect
+    - Station's displayed price updates when a fresh report arrives
+    - Reports older than 2 hours are marked as "unverified"
+
+
+  S5-05 | 2 pts | Frontend
+  Hackathon demo mode
+  -----------------------------------------------------------------------
+  AS A hackathon judge or demo viewer
+  I WANT to be able to explore the full app with realistic pre-loaded
+    data so that I can see every feature working without needing to
+    set up a real trip or make a real payment
+  SO THAT the demo is smooth, impressive, and covers the entire
+    FuelEquity experience in under 5 minutes
+
+  Acceptance Criteria:
+    - "Load demo data" button available in dev/demo build settings
+    - Pre-seeds: Burlington → Ottawa trip, 4 riders (You, Sara, Mike, Jade),
+      all expenses (fuel $59.15, parking $22, meals $35), GreenMiles 1,240
+    - Sara shown as paid, Mike and Jade shown as pending
+    - All screens fully interactive with demo data
+    - One-tap "Reset demo" clears and re-seeds data instantly
+    - Demo mode banner shown discreetly so judges know it is a demo
+
+
+  S5-06 | 3 pts | Backend
+  Performance and offline support
+  -----------------------------------------------------------------------
+  AS A user in an area with poor cell reception (common on Ontario
+    highway trips)
+  I WANT the app to continue showing my trip data and allow me to
+    add expenses even when I have no internet connection
+  SO THAT losing signal on the 401 does not break the expense
+    tracking experience
+
+  Acceptance Criteria:
+    - Firestore offline persistence enabled
+    - Expenses added offline are queued and synced when connection returns
+    - Optimistic UI: expense appears immediately in the list before
+      Firestore confirms the write
+    - Images cached locally so station logos and avatars load without network
+    - Cold start time under 2 seconds on a mid-range device
+    - Loading skeletons shown while data fetches, not blank screens
+
+
+  S5-07 | 2 pts | Frontend + Backend
+  Error handling and edge cases
+  -----------------------------------------------------------------------
+  AS A user
+  I WANT the app to handle errors gracefully with clear messages
+    rather than crashing or showing blank screens
+  SO THAT my experience is reliable even when something goes wrong
+    with the network, an API, or a payment
+
+  Acceptance Criteria:
+    - Network error states: friendly message + retry button on all
+      screens that load remote data
+    - Empty states defined for: no active trip, no trip history,
+      no nearby stations found, no expenses yet
+    - Loading skeletons on all data-dependent screens
+    - Payment failure shows clear message with option to retry or
+      use a different payment method
+    - API fallbacks: if gas price API fails, show cached prices
+      with "Prices may be outdated" disclaimer
+    - Sentry error tracking installed and logging uncaught exceptions
+
+
+================================================================================
+  SUMMARY
+================================================================================
+
+  Sprint 1 — Foundation & Auth             34 pts    8 user stories
+  Sprint 2 — Gas Prices & Eco Routing      32 pts    7 user stories
+  Sprint 3 — Expense Splitting & Payments  36 pts    7 user stories
+  Sprint 4 — AI Features & GreenMiles      28 pts    7 user stories
+  Sprint 5 — Polish, Community & Demo      18 pts    7 user stories
+                                          -------   ----------------
+  TOTAL                                   148 pts   36 user stories
+                                                    (48 sub-features)
+
+  MVP demo-ready milestone: End of Sprint 3
+  Hackathon winner features: Sprints 4 and 5
+
+  Tech stack:
+    Mobile:    Expo (React Native) + TypeScript
+    Auth:      Firebase Auth (Email + Google OAuth)
+    Database:  Cloud Firestore (real-time listeners)
+    Functions: Firebase Cloud Functions
+    Push:      Firebase Cloud Messaging (FCM)
+    Payments:  Stripe Connect (Express) + @stripe/stripe-react-native
+               Apple Pay + Google Pay supported
+    AI:        Claude API (insights + receipt scanning)
+               Claude Vision API (receipt OCR)
+    APIs:      Google Maps Routes · Google Elevation
+               OpenWeatherMap · TollGuru · GasBuddy / Kalibrate
+               NRCan (fallback gas prices)
+    Monitoring: Sentry
+
+================================================================================
+  END OF SPRINT PLAN — FuelEquity v1.0
+================================================================================
