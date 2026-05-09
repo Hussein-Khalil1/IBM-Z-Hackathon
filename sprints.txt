@@ -54,7 +54,7 @@
 
   Acceptance Criteria:
     - Email + password registration with validation
-    - Google one-tap OAuth sign-in works on iOS and Android
+    - Google one-tap OAuth sign-in works on iOS 
     - Persistent session — user stays logged in after app close
     - Auth errors display human-readable messages (not Firebase codes)
     - Password reset email flow works
@@ -88,7 +88,7 @@
   -----------------------------------------------------------------------
   AS A user
   I WANT a clear bottom navigation bar with Home, Splits, Add Expense,
-    and GreenMiles tabs
+    and GreenMiles tabs, maps
   SO THAT I can move between the core features of the app quickly
     and intuitively
 
