@@ -746,7 +746,8 @@
   MVP demo-ready milestone: End of Sprint 3
   Hackathon winner features: Sprints 4 and 5
 
-  Tech stack:
+  
+Tech stack:
     Mobile:    Expo (React Native) + TypeScript
     Auth:      Firebase Auth (Email + Google OAuth)
     Database:  Cloud Firestore (real-time listeners)
@@ -754,13 +755,15 @@
     Push:      Firebase Cloud Messaging (FCM)
     Payments:  Stripe Connect (Express) + @stripe/stripe-react-native
                Apple Pay + Google Pay supported
-    AI:        Claude API (insights + receipt scanning)
-               Claude Vision API (receipt OCR)
+    AI:        IBM watsonx.ai — ibm/granite-3-3-8b-instruct
+                 (AI insights · predictive price alerts · fuel burden index)
+               IBM watsonx.ai — ibm/granite-vision-3-3-2b
+                 (receipt scanning · OCR · image-to-text extraction)
     APIs:      Google Maps Routes · Google Elevation
                OpenWeatherMap · TollGuru · GasBuddy / Kalibrate
                NRCan (fallback gas prices)
     Monitoring: Sentry
 
 ================================================================================
-  END OF SPRINT PLAN — FuelEquity v1.0
+  END OF SPRINT PLAN — FuelEquity v1.0  
 ================================================================================
