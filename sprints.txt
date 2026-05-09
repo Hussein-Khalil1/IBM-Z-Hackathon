@@ -204,7 +204,7 @@
     - If extraction fails, form is blank and user is notified gracefully
 
 
-  S2-03 | API + Backend
+ *** S2-03 | API + Backend *** SKIPPED **********************************
   Stripe Connect integration
   -----------------------------------------------------------------------
   AS A driver
@@ -226,6 +226,7 @@
   SO THAT I can settle my portion of the trip quickly without needing
     to sign up for any external payment service
 
+*************************************************************************
 
   S2-04 | Frontend
   Splits screen — per-rider breakdown

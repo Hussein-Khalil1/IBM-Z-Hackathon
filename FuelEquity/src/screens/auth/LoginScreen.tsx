@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
 import { Colors, FontSize, FontWeight, Spacing, Radius } from '../../theme';
 import { AuthInput } from '../../components/ui/AuthInput';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
@@ -19,8 +18,6 @@ import { signInWithEmail, signInWithGoogleCredential } from '../../services/auth
 import { friendlyAuthError } from '../../utils/authErrors';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { AuthStackParamList } from './types';
-
-WebBrowser.maybeCompleteAuthSession();
 
 const GOOGLE_CONFIGURED =
   !!process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID &&

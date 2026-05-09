@@ -25,6 +25,13 @@ type Props = NativeStackScreenProps<HomeStackParamList, 'Profile'>;
 
 const CURRENCIES = ['CAD', 'USD', 'EUR', 'GBP', 'AUD', 'MXN'];
 
+interface NotifPrefs {
+  newExpense: boolean;
+  paymentRequested: boolean;
+  paymentReceived: boolean;
+  reminder: boolean;
+}
+
 interface ProfileForm {
   displayName: string;
   vehicleMake: string;
@@ -32,6 +39,7 @@ interface ProfileForm {
   fuelEfficiencyL100km: string;
   fuelType: 'gas' | 'electric' | 'hybrid';
   notificationsEnabled: boolean;
+  notifPrefs: NotifPrefs;
   currency: string;
 }
 
@@ -50,6 +58,7 @@ export default function ProfileScreen({ navigation }: Props) {
     fuelEfficiencyL100km: '',
     fuelType: 'gas',
     notificationsEnabled: true,
+    notifPrefs: { newExpense: true, paymentRequested: true, paymentReceived: true, reminder: true },
     currency: 'CAD',
   });
   const [loading, setLoading] = useState(true);
@@ -70,6 +79,12 @@ export default function ProfileScreen({ navigation }: Props) {
               : '',
             fuelType: profile.vehicle?.fuelType ?? 'gas',
             notificationsEnabled: profile.notificationsEnabled ?? true,
+            notifPrefs: {
+              newExpense: profile.notificationPreferences?.newExpense ?? true,
+              paymentRequested: profile.notificationPreferences?.paymentRequested ?? true,
+              paymentReceived: profile.notificationPreferences?.paymentReceived ?? true,
+              reminder: profile.notificationPreferences?.reminder ?? true,
+            },
             currency: profile.currency ?? 'CAD',
           });
         } else {
@@ -94,6 +109,7 @@ export default function ProfileScreen({ navigation }: Props) {
         email: user.email ?? '',
         displayName: form.displayName.trim(),
         notificationsEnabled: form.notificationsEnabled,
+        notificationPreferences: form.notifPrefs,
         currency: form.currency,
         ...(hasVehicle && {
           vehicle: {
@@ -211,6 +227,33 @@ export default function ProfileScreen({ navigation }: Props) {
                 thumbColor={form.notificationsEnabled ? Colors.primary : Colors.textSecondary}
               />
             </View>
+            {form.notificationsEnabled && (
+              <>
+                {(
+                  [
+                    { key: 'newExpense', label: 'New expenses' },
+                    { key: 'paymentRequested', label: 'Payment requests' },
+                    { key: 'paymentReceived', label: 'Payment received' },
+                    { key: 'reminder', label: 'Payment reminders' },
+                  ] as { key: keyof NotifPrefs; label: string }[]
+                ).map(({ key, label }) => (
+                  <View key={key} style={[styles.field, styles.fieldBorder, styles.subField]}>
+                    <Text style={styles.subFieldLabel}>{label}</Text>
+                    <Switch
+                      value={form.notifPrefs[key]}
+                      onValueChange={(v) =>
+                        setForm((f) => ({
+                          ...f,
+                          notifPrefs: { ...f.notifPrefs, [key]: v },
+                        }))
+                      }
+                      trackColor={{ false: Colors.border, true: Colors.primaryMuted }}
+                      thumbColor={form.notifPrefs[key] ? Colors.primary : Colors.textSecondary}
+                    />
+                  </View>
+                ))}
+              </>
+            )}
             <TouchableOpacity
               style={[styles.field, styles.fieldBorder]}
               onPress={() => setCurrencyModal(true)}
@@ -373,6 +416,16 @@ const styles = StyleSheet.create({
   value: {
     color: Colors.textSecondary,
     fontSize: FontSize.base,
+  },
+
+  subField: {
+    paddingLeft: Spacing.base + Spacing.md,
+  },
+  subFieldLabel: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.regular,
+    flex: 1,
   },
 
   saveBtn: {

@@ -9,7 +9,15 @@ export interface UserDoc {
   createdAt: Timestamp;
   greenMilesTotal: number;
   notificationsEnabled?: boolean;
+  notificationPreferences?: {
+    newExpense?: boolean;
+    paymentRequested?: boolean;
+    paymentReceived?: boolean;
+    reminder?: boolean;
+  };
   currency?: string;
+  fcmToken?: string;
+  stripeConnectedAccountId?: string;
   vehicle?: {
     make: string;
     model: string;
@@ -64,6 +72,23 @@ export interface RiderDoc {
   joinedAt: Timestamp;
   amountOwed: number;
   amountPaid: number;
+  paymentStatus?: 'none' | 'requested' | 'paid';
+}
+
+// /trips/{tripId}/paymentRequests/{requestId}
+export interface PaymentRequestDoc {
+  requestId: string;
+  tripId: string;
+  driverId: string;
+  riderId: string;
+  amount: number;
+  amountCents: number;
+  currency: string;
+  status: 'pending' | 'paid' | 'failed' | 'cancelled';
+  paymentIntentId: string;
+  clientSecret: string;
+  createdAt: Timestamp;
+  paidAt?: Timestamp;
 }
 
 // /greenMiles/{recordId}
