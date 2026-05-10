@@ -7,6 +7,9 @@ import CreateTripScreen from './CreateTripScreen';
 import TripLobbyScreen from './TripLobbyScreen';
 import TripDetailScreen from './TripDetailScreen';
 import JoinTripScreen from './JoinTripScreen';
+import GasPricesScreen from './gasPrices/GasPricesScreen';
+import RoutePickerScreen from './routePicker/RoutePickerScreen';
+import FuelSimulatorScreen from './fuelSimulator/FuelSimulatorScreen';
 import type { HomeStackParamList } from '../types';
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -20,6 +23,9 @@ export default function HomeStack() {
       <Stack.Screen name="TripLobby" component={TripLobbyScreen} />
       <Stack.Screen name="TripDetail" component={TripDetailScreen} />
       <Stack.Screen name="JoinTrip" component={JoinTripScreen} />
+      <Stack.Screen name="GasPrices" component={GasPricesScreen} />
+      <Stack.Screen name="RoutePicker" component={RoutePickerScreen} />
+      <Stack.Screen name="FuelSimulator" component={FuelSimulatorScreen} />
     </Stack.Navigator>
   );
 }

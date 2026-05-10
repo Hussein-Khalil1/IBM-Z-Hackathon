@@ -8,6 +8,7 @@ import SplitsStack from './splits/SplitsStack';
 import AddExpenseStack from './addExpense/AddExpenseStack';
 import GreenMilesStack from './greenMiles/GreenMilesStack';
 import MapsStack from './maps/MapsStack';
+import { GasPricesStack } from './gasPrices';
 import type { MainTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -68,6 +69,16 @@ export default function MainNavigator() {
           tabBarLabel: 'Green',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="leaf-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="GasPrices"
+        component={GasPricesStack}
+        options={{
+          tabBarLabel: 'Gas',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="flame-outline" size={size} color={color} />
           ),
         }}
       />
