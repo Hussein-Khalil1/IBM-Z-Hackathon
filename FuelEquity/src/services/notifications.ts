@@ -47,7 +47,7 @@ async function getDevicePushToken(): Promise<string | null> {
 }
 
 export async function registerForPushNotifications(userId: string): Promise<void> {
-  const token = await getDevicePushToken();
-  if (!token) return;
-  await setDoc(doc(db, 'users', userId), { fcmToken: token }, { merge: true });
+  // Temporarily disabled: expo-notifications not supported in Expo Go on SDK 53+
+  // Will re-enable with development build
+  return;
 }

@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useStripe } from '@stripe/stripe-react-native';
 import { Colors, FontSize, FontWeight, Spacing, Radius, Shadow } from '../../../theme';
 import { useAuthStore } from '../../../store/authStore';
 import { subscribeToActiveTrip, subscribeToRiders } from '../../../services/trips';
@@ -75,7 +74,6 @@ function computeBreakdowns(
 
 export default function SplitsScreen() {
   const user = useAuthStore((s) => s.user);
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   const [activeTrip, setActiveTrip] = useState<TripDoc | null>(null);
   const [activeTripId, setActiveTripId] = useState<string | null>(null);
@@ -180,23 +178,9 @@ export default function SplitsScreen() {
     if (!pendingRequest || !activeTripId) return;
     setPaying(true);
     try {
-      const { error: initError } = await initPaymentSheet({
-        paymentIntentClientSecret: pendingRequest.clientSecret,
-        merchantDisplayName: 'FuelEquity',
-        applePay: { merchantCountryCode: 'US' },
-        style: 'alwaysDark',
-      });
-      if (initError) throw new Error(initError.message);
-
-      const { error: presentError } = await presentPaymentSheet();
-      if (presentError) {
-        if (presentError.code !== 'Canceled') {
-          Alert.alert('Payment failed', presentError.message);
-        }
-        return;
-      }
-
+      // Dummy payment workflow - just confirm without actual payment processing
       await callConfirmPayment(activeTripId, pendingRequest.requestId);
+      Alert.alert('Success', 'Payment marked as complete in this trip!');
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : 'Please try again.';
       Alert.alert('Payment error', message);
