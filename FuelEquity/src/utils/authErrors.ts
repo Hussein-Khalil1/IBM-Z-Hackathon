@@ -5,6 +5,7 @@
 const AUTH_ERROR_MAP: Record<string, string> = {
   // Sign-in / sign-up
   'auth/email-already-in-use': 'An account with this email already exists.',
+  'auth/operation-not-allowed': 'Email/password sign-in is not enabled. Please contact support.',
   'auth/user-not-found': 'No account found with this email.',
   'auth/wrong-password': 'Incorrect password. Please try again.',
   'auth/invalid-credential': 'Incorrect email or password.',
