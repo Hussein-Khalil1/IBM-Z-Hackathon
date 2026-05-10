@@ -11,7 +11,9 @@ import {
 } from 'firebase/auth';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import { Timestamp } from 'firebase/firestore';
 import { auth } from './firebase';
+import { upsertUserProfile } from './profile';
 
 // Required for expo-auth-session Google flow on mobile
 WebBrowser.maybeCompleteAuthSession();
@@ -25,6 +27,13 @@ export async function signUpWithEmail(
 ): Promise<User> {
   const credential = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(credential.user, { displayName });
+  await upsertUserProfile(credential.user.uid, {
+    uid: credential.user.uid,
+    displayName,
+    email: credential.user.email ?? email,
+    createdAt: Timestamp.now(),
+    greenMilesTotal: 0,
+  });
   return credential.user;
 }
 
