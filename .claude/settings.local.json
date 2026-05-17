@@ -22,7 +22,11 @@
       "Bash(npx -y firebase-tools@latest functions:list)",
       "Bash(npm run *)",
       "Bash(node *)",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\)['dependencies']; print\\(d.get\\('react-native-maps','missing'\\), d.get\\('expo-blur','missing'\\), d.get\\('expo-haptics','missing'\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\)['dependencies']; print\\(d.get\\('react-native-maps','missing'\\), d.get\\('expo-blur','missing'\\), d.get\\('expo-haptics','missing'\\)\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git reset *)",
+      "Bash(pod install *)"
     ]
   }
 }
