@@ -3,6 +3,7 @@ export type MainTabParamList = {
   Splits: undefined;
   AddExpense: undefined;
   GreenMiles: undefined;
+  GasPrices: undefined;
   Maps: undefined;
 };
 
@@ -13,6 +14,9 @@ export type HomeStackParamList = {
   TripLobby: { tripId: string };
   TripDetail: { tripId: string };
   JoinTrip: { code?: string };
+  GasPrices: undefined;
+  RoutePicker: { origin: { latitude: number; longitude: number }; destination: { latitude: number; longitude: number }; baseFuelEfficiency: number; gasPrice: number; onSelectRoute: (route: any) => void };
+  FuelSimulator: undefined;
 };
 
 export type SplitsStackParamList = {
@@ -25,6 +29,7 @@ export type AddExpenseStackParamList = {
 
 export type GreenMilesStackParamList = {
   GreenMilesScreen: undefined;
+  GreenMilesRedeem: undefined;
 };
 
 export type MapsStackParamList = {

@@ -49,13 +49,7 @@
           "sounds": []
         }
       ],
-      [
-        "@stripe/stripe-react-native",
-        {
-          "merchantIdentifier": "merchant.com.fuelequity",
-          "enableGooglePay": false
-        }
-      ],
+
       [
         "expo-location",
         {
